@@ -28,7 +28,7 @@ Creditful is a loan management application designed for borrowers to monitor the
 1. open terminal and cd to .../IT342_Morales_Creditful/web
 2. type "npm start"
 ### backend | Spring Boot:
-1. 
+1. select CreditfulApplication.java and run main
 ## Contributing Members
 MORALES, Dilton Rowan S.
 

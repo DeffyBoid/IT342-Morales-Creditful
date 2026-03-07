@@ -1,17 +1,22 @@
 package edu.cit.morales.creditful.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import edu.cit.morales.creditful.dto.LoginRequest;
+import edu.cit.morales.creditful.dto.RegisterRequest;
+import edu.cit.morales.creditful.dto.UserResponse;
 import edu.cit.morales.creditful.entity.User;
 import edu.cit.morales.creditful.service.AuthService;
 
-import java.util.Map;
-import java.util.HashMap;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/api/v1/auth")
+@CrossOrigin(origins = "http://localhost:3001")
 public class AuthController {
 
     private final AuthService authService;
@@ -22,10 +27,10 @@ public class AuthController {
     }
 
     // ===== User Registration =====
-    /* 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request) {
+    public ResponseEntity<UserResponse> registerUser(@RequestBody RegisterRequest request) {
         try {
+            // Call service to register, returns token string
             String token = authService.register(
                     request.getEmail(),
                     request.getPassword(),
@@ -33,68 +38,36 @@ public class AuthController {
                     request.getLastname()
             );
 
-            return ResponseEntity.ok(new ApiResponse(true, "User registered successfully", token));
+            // Wrap token in UserResponse
+            UserResponse response = new UserResponse(
+                    true,
+                    "User registered successfully",
+                    token
+            );
+
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new ApiResponse(false, e.getMessage(), null));
+            UserResponse errorResponse = new UserResponse(
+                    false,
+                    e.getMessage(),
+                    null
+            );
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
-    */
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> user) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
+    @PostMapping("/login")
+    public ResponseEntity<UserResponse> login(@RequestBody LoginRequest request) {
+        try {
+            User user = authService.login(request.getEmail(), request.getPassword());
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("user", user);
-        data.put("accessToken", "fake-jwt-token-12345");
-        data.put("refreshToken", "fake-refresh-token-12345");
+            UserResponse response = new UserResponse(true, "Login successful", user);
+            return ResponseEntity.ok(response);
 
-        response.put("data", data);
-        response.put("error", null);
-        response.put("timestamp", java.time.Instant.now().toString());
-
-    return ResponseEntity.ok(response);
-
-}
-    // ===== DTO Classes =====
-    public static class RegisterRequest {
-        private String email;
-        private String password;
-        private String firstname;
-        private String lastname;
-
-        // Getters and Setters
-        public String getEmail() { return email; }
-        public void setEmail(String email) { this.email = email; }
-
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
-
-        public String getFirstname() { return firstname; }
-        public void setFirstname(String firstname) { this.firstname = firstname; }
-
-        public String getLastname() { return lastname; }
-        public void setLastname(String lastname) { this.lastname = lastname; }
-    }
-
-    public static class ApiResponse {
-        private boolean success;
-        private String message;
-        private Object data;
-
-        public ApiResponse(boolean success, String message, Object data) {
-            this.success = success;
-            this.message = message;
-            this.data = data;
+        } catch (Exception e) {
+            UserResponse response = new UserResponse(false, e.getMessage(), null);
+            return ResponseEntity.status(403).body(response); // 403 = Forbidden
         }
-
-        // Getters
-        public boolean isSuccess() { return success; }
-        public String getMessage() { return message; }
-        public Object getData() { return data; }
     }
 }

@@ -1,70 +1,84 @@
-import { useState } from "react";
-import { registerUser } from "../services/api";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-function RegistrationForm() {
-  const [form, setForm] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    password: "",
-  });
-  const [message, setMessage] = useState("");
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+function RegisterForm() {
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
+
     try {
-      const data = await registerUser(form);
-      if (data.success) {
-        setMessage("Registration successful! Token: " + data.data);
+      const response = await fetch("http://localhost:8080/api/v1/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ firstname, lastname, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setSuccess("Registration successful! You can now log in.");
+        setTimeout(() => navigate("/login"), 2000); // Redirect after 2s
       } else {
-        setMessage("Error: " + data.error.message);
+        setError(data.message || "Registration failed.");
       }
     } catch (err) {
-      setMessage("Something went wrong.");
+      console.error(err);
+      setError("Server unreachable or network error");
     }
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "50px" }}>
+      <h1>Register</h1>
+      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", width: "300px", gap: "10px" }}>
         <input
           type="text"
-          name="firstname"
           placeholder="First Name"
-          value={form.firstname}
-          onChange={handleChange}
+          value={firstname}
+          onChange={(e) => setFirstname(e.target.value)}
+          required
         />
         <input
           type="text"
-          name="lastname"
           placeholder="Last Name"
-          value={form.lastname}
-          onChange={handleChange}
+          value={lastname}
+          onChange={(e) => setLastname(e.target.value)}
+          required
         />
         <input
           type="email"
-          name="email"
           placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           type="password"
-          name="password"
           placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
         />
-        <button type="submit">Register</button>
+        <button type="submit" style={{ padding: "10px", marginTop: "10px" }}>Register</button>
       </form>
-      <p>{message}</p>
+
+      {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+      {success && <p style={{ color: "green", marginTop: "10px" }}>{success}</p>}
+
+      <p style={{ marginTop: "20px" }}>
+        Already have an account? <Link to="/login">Login here</Link>
+      </p>
     </div>
   );
 }
 
-export default RegistrationForm;
+export default RegisterForm;

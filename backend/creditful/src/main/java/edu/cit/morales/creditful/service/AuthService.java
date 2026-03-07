@@ -1,38 +1,55 @@
 package edu.cit.morales.creditful.service;
 
-import edu.cit.morales.creditful.entity.User;
-import edu.cit.morales.creditful.repository.UserRepository;
-import edu.cit.morales.creditful.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import edu.cit.morales.creditful.entity.User;
+import edu.cit.morales.creditful.repository.UserRepository;
 
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
 
     @Autowired
-    public AuthService(UserRepository userRepository, JwtUtil jwtUtil) {
+    public AuthService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.jwtUtil = jwtUtil;
-        this.passwordEncoder = new BCryptPasswordEncoder();
+        this.passwordEncoder = new BCryptPasswordEncoder(); // secure password hashing
     }
 
+    // ===== Registration =====
     public String register(String email, String password, String firstname, String lastname) throws Exception {
         if (userRepository.existsByEmail(email)) {
-            throw new Exception("Email already registered");
+            throw new Exception("Email is already registered");
         }
 
         String encodedPassword = passwordEncoder.encode(password);
 
-        User newUser = new User(email, encodedPassword, firstname, lastname);
-        newUser.setRole("BORROWER"); // default role
-        userRepository.save(newUser);
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(encodedPassword);
+        user.setFirstname(firstname);
+        user.setLastname(lastname);
 
-        // Generate JWT
-        return jwtUtil.generateToken(newUser.getEmail(), newUser.getRole());
+        userRepository.save(user);
+
+        // Return fake token for now
+        return "fake-jwt-token-12345";
+    }
+
+    // ===== Login =====
+    public User login(String email, String password) throws Exception {
+        // Check if user exists
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new Exception("User not found"));
+
+        // Check password
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new Exception("Invalid password");
+        }
+
+        return user; // successful login
     }
 }

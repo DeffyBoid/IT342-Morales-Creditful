@@ -1,14 +1,15 @@
 package edu.cit.morales.creditful.repository;
 
-import edu.cit.morales.creditful.entity.User;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import java.util.Optional;
+
+import edu.cit.morales.creditful.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    
-    Optional<User> findByEmail(String email);           // Find a user by email (used for login & registration check)
+    boolean existsByEmail(String email);
 
-    boolean existsByEmail(String email);                // Check if email already exists
+    Optional<User> findByEmail(String email);
 }
