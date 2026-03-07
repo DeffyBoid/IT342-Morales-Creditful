@@ -1,7 +1,7 @@
-# Morales - User Registration and Authentication
+# Morales - Creditful
 
 ## Project Description
-This project aims to work on the functionality of Registering and Authenticating
+Creditful is a loan management application designed for borrowers to monitor their loan information and for public users to verify whether a borrower has an existing loan record.
 
 ## Contents
 ### IT342_Morales_Creditful 
@@ -24,10 +24,11 @@ This project aims to work on the functionality of Registering and Authenticating
 
 ## Usage
 ### How to run or use the project.
-React:
+### frontend | React:
 1. open terminal and cd to .../IT342_Morales_Creditful/web
 2. type "npm start"
-
+### backend | Spring Boot:
+1. 
 ## Contributing Members
 MORALES, Dilton Rowan S.
 
