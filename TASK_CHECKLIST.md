@@ -1,10 +1,13 @@
 ## Todo
 ### Phase 1
-- done
-
 ### Phase 2
-- to be added
+- implemented mobile login
+- implemented mobile register
+- implemented mobile dashboard
+
 ## In Progress
+- initializing mobile gradle and apk
+- implemented connection between backend and mobile
 
 ## Done
 - implemented user registration
@@ -14,3 +17,5 @@
 - implemented successful login
 ## Milestone
 - [/] Completed Phase 1 
+- [ ] Completed Phase 2
+- [ ] Completed Phase 3
