@@ -68,7 +68,7 @@
 - [ ] Add GitHub repository link
 - [ ] Include final commit link or hash per phase
 - [ ] Write Phase 1 summary (authentication)
-- [ ]Write Phase 2 summary (mobile and API integration)
+- [ ] Write Phase 2 summary (mobile and API integration)
 - [ ] Write Phase 3 summary (main feature)
 ## Milestones
 - [ ] Phase 1 Completed
