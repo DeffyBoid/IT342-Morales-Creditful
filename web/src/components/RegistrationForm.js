@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "../styles/Auth.css";
 
 function RegisterForm() {
   const [firstname, setFirstname] = useState("");
@@ -37,47 +38,62 @@ function RegisterForm() {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "50px" }}>
-      <h1>Register</h1>
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", width: "300px", gap: "10px" }}>
+  <div className="auth-container">
+    <div className="auth-header">Creditful</div>
+    
+    <div className="auth-card">
+      <h1 className="auth-title">Register</h1>
+
+      <form onSubmit={handleSubmit}>
         <input
+          className="auth-input"
           type="text"
           placeholder="First Name"
           value={firstname}
           onChange={(e) => setFirstname(e.target.value)}
           required
         />
+
         <input
+          className="auth-input"
           type="text"
           placeholder="Last Name"
           value={lastname}
           onChange={(e) => setLastname(e.target.value)}
           required
         />
+
         <input
+          className="auth-input"
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+
         <input
+          className="auth-input"
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" style={{ padding: "10px", marginTop: "10px" }}>Register</button>
+
+        <button className="auth-button" type="submit">
+          Register
+        </button>
       </form>
 
-      {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
-      {success && <p style={{ color: "green", marginTop: "10px" }}>{success}</p>}
+      {error && <p className="error-text">{error}</p>}
+      {success && <p className="success-text">{success}</p>}
 
-      <p style={{ marginTop: "20px" }}>
-        Already have an account? <Link to="/login">Login here</Link>
+      <p className="auth-link">
+        Already have an account? <Link to="/login">Login</Link>
       </p>
     </div>
+  </div>
   );
 }
 

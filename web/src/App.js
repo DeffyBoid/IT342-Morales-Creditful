@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import LoginForm from "./components/LoginForm";
 import Dashboard from "./components/Dashboard";
 import RegisterForm from "./components/RegistrationForm";
+import Loans from "./components/Loans";
+import Profile from "./components/Profile";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/loans" element={<Loans />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );

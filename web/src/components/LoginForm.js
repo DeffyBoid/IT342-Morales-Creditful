@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "../styles/Auth.css";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -33,38 +34,43 @@ function LoginForm() {
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Login</h1>
+  <div className="auth-container">
+    <div className="auth-header">Creditful</div>
+    
+    <div className="auth-card">
+      <h1 className="auth-title">Login</h1>
+
       <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" style={{ padding: "10px 20px", marginTop: "10px" }}>
+        <input
+          className="auth-input"
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
+        <input
+          className="auth-input"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+
+        <button className="auth-button" type="submit">
           Login
         </button>
       </form>
 
-      {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+      {error && <p className="error-text">{error}</p>}
 
-      <p style={{ marginTop: "20px" }}>
-        Don't have an account? <Link to="/register">Sign up here</Link>
+      <p className="auth-link">
+        Don't have an account? <Link to="/register">Sign up</Link>
       </p>
     </div>
+  </div>
   );
 }
 
